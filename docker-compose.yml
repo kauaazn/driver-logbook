@@ -1,0 +1,15 @@
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: diario-database
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: diario
+      POSTGRES_USER: diario
+      POSTGRES_PASSWORD: diario
+    ports:
+      - "5432:5432"
+    volumes:
+      - diario-data:/var/lib/postgresql/data
+volumes:
+  diario-data:
