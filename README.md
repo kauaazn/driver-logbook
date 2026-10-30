@@ -44,6 +44,8 @@ Ao abrir pela primeira vez, cadastre um veículo para iniciar o fluxo. O banco �
 
 ## Como estudar a arquitetura
 
+Para seguir uma ação da tela até o banco, use também o [Guia de estudo](GUIA-DE-ESTUDO.md).
+
 1. **Interface — `frontend/app/page.tsx`:** carrega o dashboard, histórico e frota. `refresh` consulta `GET /api/dashboard`; `act` envia as ações de formulário e atualiza a tela quando o servidor confirma.
 2. **Componentes de interação:** `Dialog` concentra os formulários de veículo, turno, avaria e encerramento. A interface oferece feedback, mas as regras de negócio também são conferidas pelo servidor.
 3. **Entrada da API — `DiarioApplication.java`:** configura Spring Boot e libera CORS para o endereço local do Next.js.
