@@ -13,7 +13,7 @@ Aplicação para registrar turnos, inspeções e avarias de uma frota. A interfa
 
 ## Executar localmente
 
-Requer Node.js 20+, Java 21+, Maven 3.9+ e Docker com Compose.
+Requer Node.js 20.19+, Java 21+, Maven 3.9+ e Docker com Compose.
 
 1. Inicie o PostgreSQL:
 
