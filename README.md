@@ -1,4 +1,4 @@
-# Rota — Diário de Bordo
+# Diário Motorista
 
 Aplicação para registrar turnos, inspeções e avarias de uma frota. A interface web em Next.js consome uma API REST em Java/Spring Boot; o PostgreSQL guarda o histórico.
 
