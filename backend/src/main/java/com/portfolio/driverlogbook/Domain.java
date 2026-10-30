@@ -1,4 +1,4 @@
-package com.portfolio.diariodebordo;
+package com.portfolio.driverlogbook;
 
 import jakarta.persistence.*;
 import java.time.Instant;
@@ -47,11 +47,11 @@ class Damage {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY) Long id;
     @ManyToOne(optional=false,fetch=FetchType.LAZY) Vehicle vehicle;
     @Column(nullable=false,length=1000) String description;
-    @Enumerated(EnumType.STRING) @Column(nullable=false) DamageStatus status=DamageStatus.ABERTA;
+    @Enumerated(EnumType.STRING) @Column(nullable=false) DamageStatus status=DamageStatus.OPEN;
     @ManyToOne(fetch=FetchType.LAZY) Shift shift;
     Instant createdAt=Instant.now();
     Instant updatedAt=Instant.now();
     protected Damage() {}
     Damage(Vehicle vehicle,String description,Shift shift){this.vehicle=vehicle;this.description=description;this.shift=shift;}
 }
-enum DamageStatus { ABERTA, EM_MANUTENCAO, RESOLVIDA }
+enum DamageStatus { OPEN, IN_MAINTENANCE, RESOLVED }

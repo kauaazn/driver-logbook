@@ -1,4 +1,4 @@
-package com.portfolio.diariodebordo;
+package com.portfolio.driverlogbook;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.*;

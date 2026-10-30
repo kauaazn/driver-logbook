@@ -1,15 +1,15 @@
 services:
   database:
     image: postgres:16-alpine
-    container_name: diario-motorista-database
+    container_name: driver-logbook-database
     restart: unless-stopped
     environment:
-      POSTGRES_DB: diario
-      POSTGRES_USER: diario
-      POSTGRES_PASSWORD: diario
+      POSTGRES_DB: driverlogbook
+      POSTGRES_USER: driverlogbook
+      POSTGRES_PASSWORD: driverlogbook
     ports:
       - "5432:5432"
     volumes:
-      - diario-motorista-data:/var/lib/postgresql/data
+      - driver-logbook-data:/var/lib/postgresql/data
 volumes:
-  diario-motorista-data:
+  driver-logbook-data:
