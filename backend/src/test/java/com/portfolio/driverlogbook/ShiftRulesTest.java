@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -39,5 +40,27 @@ class ShiftRulesTest {
 
         assertThat(exception.getStatusCode().value()).isEqualTo(409);
         verify(shifts).findFirstByEndedAtIsNull();
+    }
+
+    @Test
+    void acceptsStartingAShiftWhenThereIsNoActiveShift() {
+        when(shifts.findFirstByEndedAtIsNull()).thenReturn(Optional.empty());
+
+        assertDoesNotThrow(rules::ensureNoActiveShift);
+        verify(shifts).findFirstByEndedAtIsNull();
+    }
+
+    @Test
+    void rejectsEndingMileageBelowStartingMileage() {
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> rules.ensureEndingMileageIsValid(120_000, 119_999));
+
+        assertThat(exception.getStatusCode().value()).isEqualTo(422);
+    }
+
+    @Test
+    void acceptsEndingMileageEqualToStartingMileage() {
+        assertDoesNotThrow(() -> rules.ensureEndingMileageIsValid(120_000, 120_000));
     }
 }
