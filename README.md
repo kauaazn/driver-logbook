@@ -27,7 +27,7 @@ Driver Logbook is a full-stack app for recording fleet vehicles, driver shifts, 
 
 Set `DATABASE_URL`, `DATABASE_USER`, or `DATABASE_PASSWORD` to override local database settings. Set `NEXT_PUBLIC_API_URL` to point the frontend at another API URL.
 
-See [Study Guide](STUDY-GUIDE.md) for the request flow, domain model, API routes, and study exercises.
+See [Study Guide](docs/STUDY-GUIDE.md) for the request flow, domain model, API routes, and study exercises.
 
 ## Current scope
 
