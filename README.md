@@ -29,6 +29,20 @@ Set `DATABASE_URL`, `DATABASE_USER`, or `DATABASE_PASSWORD` to override local da
 
 See [Study Guide](docs/STUDY-GUIDE.md) for the request flow, domain model, API routes, and study exercises.
 
+## Deploy the API
+
+The backend ships with `backend/Dockerfile`, so any Docker-capable host (Render, Railway, Fly.io) can run it. Build context is the `backend` folder. Provide a managed PostgreSQL database and set:
+
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | JDBC URL, e.g. `jdbc:postgresql://host:5432/dbname` (not the `postgres://` form) |
+| `DATABASE_USER` / `DATABASE_PASSWORD` | Database credentials |
+| `CORS_ALLOWED_ORIGINS` | Comma-separated frontend origins, e.g. `https://your-app.vercel.app` |
+| `DDL_AUTO` | Hibernate schema mode, defaults to `update` |
+| `PORT` | Set automatically by most hosts |
+
+Use `/actuator/health` as the health check path. Point the frontend's `NEXT_PUBLIC_API_URL` at `https://<api-host>/api`.
+
 ## Current scope
 
 This portfolio version has no authentication or per-driver data separation. The single-open-shift rule applies across the application. Hibernate updates the local schema for convenience; a production deployment should use versioned migrations, authentication, and role-based access.
