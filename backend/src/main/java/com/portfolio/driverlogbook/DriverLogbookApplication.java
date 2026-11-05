@@ -10,9 +10,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class DriverLogbookApplication {
     public static void main(String[] args) { SpringApplication.run(DriverLogbookApplication.class, args); }
-    @Bean WebMvcConfigurer corsConfigurer(@Value("${app.cors.allowed-origins}") String[] allowedOrigins) { return new WebMvcConfigurer() {
+    @Bean WebMvcConfigurer corsConfigurer(@Value("${CORS_ALLOWED_ORIGIN:http://localhost:3000}") String allowedOrigin) { return new WebMvcConfigurer() {
         @Override public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/api/**").allowedOrigins(allowedOrigins).allowedMethods("GET", "POST", "PATCH", "OPTIONS").allowedHeaders("*");
+            registry.addMapping("/api/**").allowedOrigins(allowedOrigin).allowedMethods("GET", "POST", "PATCH", "OPTIONS").allowedHeaders("*");
         }
     }; }
 }

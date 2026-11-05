@@ -27,21 +27,42 @@ Driver Logbook is a full-stack app for recording fleet vehicles, driver shifts, 
 
 Set `DATABASE_URL`, `DATABASE_USER`, or `DATABASE_PASSWORD` to override local database settings. Set `NEXT_PUBLIC_API_URL` to point the frontend at another API URL.
 
-See [Study Guide](docs/STUDY-GUIDE.md) for the request flow, domain model, API routes, and study exercises.
+## Free portfolio deployment
 
-## Deploy the API
+The deployment setup uses Vercel for the Next.js frontend, Render for the Spring Boot API, and Neon for managed PostgreSQL. The backend is packaged with [backend/Dockerfile](backend/Dockerfile). No deployment URLs or database credentials are committed to this repository.
 
-The backend ships with `backend/Dockerfile`, so any Docker-capable host (Render, Railway, Fly.io) can run it. Build context is the `backend` folder. Provide a managed PostgreSQL database and set:
+### 1. Create the Neon database
 
-| Variable | Purpose |
+Create a PostgreSQL project in [Neon](https://neon.tech/), then copy its connection details. In Render, use the Neon host and database name to set `DATABASE_URL` in JDBC form, for example `jdbc:postgresql://HOST/DATABASE?sslmode=require`; set `DATABASE_USER` and `DATABASE_PASSWORD` from Neon. Keep these credentials private and enter them only in the Render environment settings.
+
+### 2. Deploy the backend to Render
+
+Create a Web Service from this GitHub repository. Set **Root Directory** to `backend`, select **Docker** as the runtime, and use `Dockerfile` as the Dockerfile path. Set the health check path to `/api/health` and add:
+
+| Variable | Value |
 | --- | --- |
-| `DATABASE_URL` | JDBC URL, e.g. `jdbc:postgresql://host:5432/dbname` (not the `postgres://` form) |
-| `DATABASE_USER` / `DATABASE_PASSWORD` | Database credentials |
-| `CORS_ALLOWED_ORIGINS` | Comma-separated frontend origins, e.g. `https://your-app.vercel.app` |
-| `DDL_AUTO` | Hibernate schema mode, defaults to `update` |
-| `PORT` | Set automatically by most hosts |
+| `DATABASE_URL` | Neon JDBC URL, including `?sslmode=require` |
+| `DATABASE_USER` | Neon database user |
+| `DATABASE_PASSWORD` | Neon database password |
+| `CORS_ALLOWED_ORIGIN` | The exact Vercel production origin, such as `https://your-app.vercel.app` (no trailing slash) |
 
-Use `/actuator/health` as the health check path. Point the frontend's `NEXT_PUBLIC_API_URL` at `https://<api-host>/api`.
+Render provides `PORT`; Spring Boot reads it automatically. The free web service may sleep when idle, so the first request after inactivity can take longer. See [Render Web Services](https://render.com/docs/web-services), [Docker on Render](https://render.com/docs/docker), and [Render environment variables](https://render.com/docs/configure-environment-variables).
+
+### 3. Deploy the frontend to Vercel
+
+Import the repository in [Vercel](https://vercel.com/), set the project **Root Directory** to `frontend`, and deploy with the default Next.js settings. Add this production environment variable, replacing the hostname with the Render service URL:
+
+| Variable | Value |
+| --- | --- |
+| `NEXT_PUBLIC_API_URL` | `https://your-api.onrender.com/api` |
+
+Redeploy after changing environment variables. Then copy the Vercel production origin (scheme and host only, no path or trailing slash) into Render's `CORS_ALLOWED_ORIGIN` and redeploy the backend. The API permits browser requests only from that one configured origin; local development defaults to `http://localhost:3000`. Preview deployments use different origins and are not allowed by this production setting.
+
+For Vercel's root directory and environment settings, see [Project Settings](https://vercel.com/docs/project-configuration/project-settings) and [Environment Variables](https://vercel.com/docs/environment-variables). Neon connection details are documented in [Connect to your database](https://neon.tech/docs/connect/connect-from-any-app).
+
+After both services are live, add their real URLs to this README and the repository's GitHub About section. The free tiers have usage limits; check current provider plans before relying on the app for ongoing use.
+
+See [Study Guide](docs/STUDY-GUIDE.md) for the request flow, domain model, API routes, and study exercises.
 
 ## Current scope
 
